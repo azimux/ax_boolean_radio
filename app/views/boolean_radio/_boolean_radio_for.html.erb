@@ -1,0 +1,17 @@
+<%= content_tag "tr", :class => tr_classes do -%>
+  <td><b><%= label -%></b></td>
+  <td>
+    <%= builder.radio_button field, true, 
+      :class => "ax_boolean_radio_yes" -%>
+  </td>
+  <td>
+    <%= builder.radio_button field, false,
+      :class => "ax_boolean_radio_no" -%>
+  </td>
+  <td>
+    <%= axt("link.Clear") do %>
+      <%= link_to(Azimux::Translation.t("link.Clear"), "/static/throw",
+        :class => "ax_boolean_radio_clear") -%>
+    <% end %>
+  </td>
+<% end %>
