@@ -9,8 +9,8 @@
       :class => "ax_boolean_radio_no" -%>
   </td>
   <td>
-    <%= axt("link.Clear") do %>
-      <%= link_to(Azimux::Translation.t("link.Clear"), "/static/throw",
+    <%= brh_translation_wrapper("link.Clear") do %>
+      <%= link_to(brh_translator("link.Clear"), "/static/throw",
         :class => "ax_boolean_radio_clear") -%>
       <% end %>
     </td>
