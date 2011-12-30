@@ -3,9 +3,9 @@ module Azimux
     #override this method to place a wrapper around calls to brh_translator
     # the default just calls whatever block is passed to it.
     # if no block is supplied, it acts like brh_translator
-    def brh_translation_wrapper *args
+    def brh_translation_wrapper *args, &block
       if block_given?
-        yield
+        capture(&block)
       else
         brh_last_part_of_key(args[0])
       end
@@ -23,7 +23,7 @@ module Azimux
 
     private
     def brh_last_part_of_key key
-      key.split(".").last
+      key.to_s.split(".").last
     end
 
     public
