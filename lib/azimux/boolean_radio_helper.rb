@@ -1,37 +1,10 @@
 module Azimux
   module BooleanRadioHelper
-    #override this method to place a wrapper around calls to brh_translator
-    # the default just calls whatever block is passed to it.
-    # if no block is supplied, it acts like brh_translator
-    def brh_translation_wrapper *args, &block
-      if block_given?
-        capture(&block)
-      else
-        brh_last_part_of_key(args[0])
-      end
-    end
+    VALID_OPTIONS = [:label, :additional_row_classes, :omit_clear_link]
 
-    #override this method to translate keys.  To use rails default
-    #translator, "t", do something like
-    # Azimux::BooleanRadioHelper.module_eval { def brh_translator *args; t *args; end }
-    # in your config.after_initialize block
-    # default behavior is just to show the value in English.  So
-    # brh_translator "link.Clear" would come out as "Clear"
-    def brh_translator *args
-      brh_last_part_of_key(args[0])
-    end
-
-    private
-    def brh_last_part_of_key key
-      key.to_s.split(".").last
-    end
-
-    public
     def invalid_boolean_radio_options?(options)
-      valid = [:label, :additional_row_classes]
-
       options.keys.each do |key|
-        if !valid.include? key.to_sym
+        unless VALID_OPTIONS.include? key.to_sym
           return key
         end
       end
@@ -98,14 +71,43 @@ module Azimux
     def boolean_range &block
       content_tag :table do
         safe_join([
-          content_tag(:th),
-          content_tag(:th, brh_translation_wrapper(:"yes")),
-          content_tag(:th, brh_translation_wrapper(:"no")),
-          content_tag(:th),
+            content_tag(:th),
+            content_tag(:th, brh_translation_wrapper(:"yes")),
+            content_tag(:th, brh_translation_wrapper(:"no")),
+            content_tag(:th),
 
-          capture(&block)
-        ])
+            capture(&block)
+          ])
       end
+    end
+
+
+    #Translation hooks:
+
+    #override this method to place a wrapper around calls to brh_translator
+    # the default just calls whatever block is passed to it.
+    # if no block is supplied, it acts like brh_translator
+    def brh_translation_wrapper *args, &block
+      if block_given?
+        capture(&block)
+      else
+        brh_last_part_of_key(args[0])
+      end
+    end
+
+    #override this method to translate keys.  To use rails default
+    #translator, "t", do something like
+    # Azimux::BooleanRadioHelper.module_eval { def brh_translator *args; t *args; end }
+    # in your config.after_initialize block
+    # default behavior is just to show the value in English.  So
+    # brh_translator "link.Clear" would come out as "Clear"
+    def brh_translator *args
+      brh_last_part_of_key(args[0])
+    end
+
+    private
+    def brh_last_part_of_key key
+      key.to_s.split(".").last
     end
 
   end
